@@ -1,60 +1,76 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<title>hCAPTCHA Demo</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, user-scalable=yes">
+<script src="https://js.hcaptcha.com/1/api.js?reportapi=https%3A%2F%2Faccounts.hcaptcha.com&custom=False" type="text/javascript" async defer></script>
+<script src="https://accounts.hcaptcha.com/static/js/b.js" type="text/javascript" async defer></script>
+<style type="text/css">
+    html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-family:-apple-system,helvetica,arial,sans-serif;font-size:14px;vertical-align:baseline}fieldset{border:1px solid #ebebeb;padding:16px}form label{display:block;line-height:29px}form ul li{margin-bottom:10px}input{font-family:-apple-system,helvetica,arial,sans-serif;font-size:14px}ul{list-style:none}.sample-form{width:335px;padding:16px}.hcaptcha-error{border:1px solid #dd4b39;padding:5px}.hcaptcha-error-message{color:#dd4b39;font-size:24px;padding:10px 0}.hcaptcha-success{margin:20px; font-size: 24px;}.smsg{color:green;}.warning{padding: 10px 10px 0px 10px;}
+      code { font-family: 'Courier New', Courier, monospace; background-color: lightgrey;}
+    }
+    }
+    </style>
+</head>
 <body>
-
-<form id="DemoForm" action="fa.html" method="post" target="_top">
-<input id="skip_SnapHostID" name="skip_SnapHostID" type="hidden" value="DEMO12345678">
-<input id="skip_WhereToSend" name="skip_WhereToSend" type="hidden" value="support[[]]snaphost.com">
-<input id="skip_WhereToReturn" name="skip_WhereToReturn" type="hidden" value="su.html">
-<input id="skip_Subject" name="skip_Subject" type="hidden" value="Subject test">
-
-<table border="0" cellpadding="5" cellspacing="0">
-<tbody><tr>
-    <td colspan="2" align="center">  </td>
-</tr>
-
-
-
-
-
-
-</tbody></table>
-<br>
-
-<table cellspacing="0" border="0" cellpadding="8">
-<tbody><tr>
-    
-</tr>
-<tr style="background-color:#ffcc66; vertical-align:bottom;">
-    <td>
-        <input id="skip_CaptchaCode" name="skip_CaptchaCode" type="text" style="width:130px;height:48px;font-size:38px;" maxlength="6"><br>
-        <i>Enter web form code</i>
-    </td>
-    <td>
-        <a href="#" onclick="return ReloadCaptchaImage('CaptchaImage');"><span style="font-size:12px;">reload image</span></a><br>
-        <a href="https://www.SnapHost.com/captcha/ProCaptchaOverview.aspx"><img id="CaptchaImage" alt="Web Form Code" style="border-width:0px;" src="https://www.SnapHost.com/captcha/CaptchaImage.aspx?id=DEMO12345678"></a>
-        <script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script><script type="text/javascript">
-            function ReloadCaptchaImage(captchaImageId) {
-                var obj = document.getElementById(captchaImageId);
-                var src = '' + obj.src;
-                obj.src = '';
-                var date = new Date();
-                var pos = src.indexOf('&rad=');
-                if (pos >= 0) { src = src.substr(0, pos); }
-                obj.src = src + '&rad=' + date.getTime();
-                return false;
-            }
-        </script>
-    </td>
-</tr>
-</tbody></table>
-
 <br><br>
+<div class="sample-form">
+<form id="hcaptcha-demo-form" method="POST">
+<fieldset>
+<legend>Sample Form with hCAPTCHA</legend>
+<ul>
+<li role="presentation">
+<div class="">
 
-<input id="skip_DemoSubmit" name="skip_DemoSubmit" type="submit" value="Submit">
-    
-<br>
+<div id="hcaptcha-demo" class="h-captcha" data-sitekey="50268c55-899b-4e93-9ecf-a0731b6dced8" data-callback="onSuccess" data-expired-callback="onExpire"></div>
+<script>
+                      // success callback
+                      var onSuccess = function(response) {
+                        var errorDivs = document.getElementsByClassName("hcaptcha-error");
+                        if (errorDivs.length) {
+                          errorDivs[0].className = "";
+                        }
+                        var errorMsgs = document.getElementsByClassName("hcaptcha-error-message");
+                        if (errorMsgs.length) {
+                          errorMsgs[0].parentNode.removeChild(errorMsgs[0]);
+                        }
 
+                        var logEl = document.querySelector(".hcaptcha-success");
+                        logEl.innerHTML = "Challenge Success!"
+                      };
+
+                      var onExpire = function(response) {
+                        var logEl = document.querySelector(".hcaptcha-success");
+                        logEl.innerHTML = "Token expired."
+                      };
+                </script>
+
+</div>
+</li>
+<li>
+<input id="hcaptcha-demo-submit" type="submit" value="Submit">
+</li>
+</ul>
+</fieldset>
 </form>
+<div class="hcaptcha-success smsg" aria-live="polite"></div>
+</div>
 </body>
+<script type="text/javascript">
+    // beacon example
+    function addEventHandler(object,szEvent,cbCallback){
+        if(!!object.addEventListener){ // for modern browsers or IE9+
+            return object.addEventListener(szEvent,cbCallback);
+        }
+        if(!!object.attachEvent){ // for IE <=8
+            return object.attachEvent(szEvent,cbCallback);
+        }
+    };
+    // Ex: triggers pageview beacon
+    addEventHandler(window,'load',function(){b();});
+    // Ex: triggers event beacon without pageview
+    addEventHandler(window,'load',function(){b({"vt": "e", "ec": "test_cat", "ea": "test_action"});});
+  </script>
 </html>
